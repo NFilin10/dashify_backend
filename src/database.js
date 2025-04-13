@@ -33,21 +33,28 @@ const execute = async (...queries) => {
 };
 
 const createTablesQuery = `
-    
+
     CREATE TABLE IF NOT EXISTS "users" (
         "id" SERIAL PRIMARY KEY,
         "name" VARCHAR(100) NOT NULL,
         "surname" VARCHAR(100) NOT NULL,
         "email" VARCHAR(255) NOT NULL,
         "password" VARCHAR(255) NOT NULL
-   
     );
-    `;
+
+    CREATE TABLE IF NOT EXISTS "layout_settings" (
+        "id" SERIAL PRIMARY KEY,
+        "theme" VARCHAR(100) NOT NULL,
+        "color" VARCHAR(100) NOT NULL,
+        "user_id" INTEGER NOT NULL,
+        FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE
+    );
+
+`;
 
 
 
 
-// A function to execute the create tables query
 execute(createTablesQuery).then(result => {
     if (result) {
         console.log('Tables created successfully');

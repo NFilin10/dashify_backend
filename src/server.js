@@ -1,7 +1,7 @@
-
 const express = require('express');
 const cors = require('cors')
 const authRoute = require('./routes/auth.route')
+const layoutRoutes = require('./routes/layout.route');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
@@ -21,9 +21,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth/', authRoute);
+app.use('/api/', layoutRoutes);
+
 
 const server = app.listen(port, () => {
     console.log("Server is listening to port " + port);
 });
+
 
 module.exports = server;

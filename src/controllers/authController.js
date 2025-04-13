@@ -34,18 +34,32 @@ const signup = async (req, res) => {
         if (user.rows.length !== 0) return res.status(401).json({ error: "User is already registered" });
 
         const salt = await bcrypt.genSalt();
-        const bcryptPassword = await bcrypt.hash(password, salt)
+        const bcryptPassword = await bcrypt.hash(password, salt);
+
         const authUser = await pool.query(
-            "INSERT INTO users(email, password, name, surname) values ($1, $2, $3, $4) RETURNING*",
-            [email, bcryptPassword, name, surname]);
-        const token = await generateJWT(authUser.rows[0].id);
+            "INSERT INTO users(email, password, name, surname) values ($1, $2, $3, $4) RETURNING *",
+            [email, bcryptPassword, name, surname]
+        );
+
+        const userId = authUser.rows[0].id;
+        await pool.query(
+            "INSERT INTO layout_settings (theme, color, user_id) VALUES ($1, $2, $3)",
+            ['default', 'default', userId]
+        );
+
+        const token = await generateJWT(userId);
+
         res
             .status(201)
             .cookie('jwt', token, { maxAge: 6000000, httpOnly: true })
-            .json({ user_id: authUser.rows[0].id })
-            .send;
-    } catch (err) {res.status(400).send(err.message);}
+            .json({ user_id: userId })
+            .send();
+
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
 }
+
 
 
 const login = async (req, res) => {
