@@ -29,6 +29,7 @@ app.use('/auth/', authRoute);
 app.use('/api/', layoutRoutes);
 
 app.use('/pos/', freeposRoutes);
+app.use('/widgets/todo/', todoRoute);
 
 
 
