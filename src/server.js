@@ -5,6 +5,7 @@ const layoutRoutes = require('./routes/layout.route');
 const freeposRoutes = require('./routes/freepos.routes');
 const todoRoute = require('./routes/todo.route');
 const widgetRoute = require('./routes/widget.route');
+const weatherRoute = require('./routes/weather.route');
 
 
 const cookieParser = require('cookie-parser');
@@ -30,6 +31,8 @@ app.use('/api/', layoutRoutes);
 
 app.use('/pos/', freeposRoutes);
 app.use('/widgets/todo/', todoRoute);
+app.use('/widgets/weather/', weatherRoute);
+
 
 
 
