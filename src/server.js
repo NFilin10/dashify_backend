@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors')
 const authRoute = require('./routes/auth.route')
 const layoutRoutes = require('./routes/layout.route');
+const freeposRoutes = require('./routes/freepos.routes');
+const todoRoute = require('./routes/todo.route');
+const widgetRoute = require('./routes/widget.route');
+
+
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
@@ -22,6 +27,12 @@ app.use(cookieParser());
 
 app.use('/auth/', authRoute);
 app.use('/api/', layoutRoutes);
+
+app.use('/pos/', freeposRoutes);
+
+
+
+
 
 
 const server = app.listen(port, () => {
