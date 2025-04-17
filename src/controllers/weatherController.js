@@ -17,13 +17,27 @@ async function getCoordinates(cityName) {
 }
 
 async function fetchWeather(lat, lon) {
-    const response = await fetch(
-        `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`
-    );
+    const url = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`;
+    console.log(`[Weather API] Request: ${url}`);
 
-    console.log(`[Weather API] Request: https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`);
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
 
-    const data = await response.json();
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Weather API error: ${response.status} ${response.statusText} - ${text}`);
+    }
+
+    let data;
+    try {
+        data = await response.json();
+    } catch (err) {
+        throw new Error("Invalid JSON response from weather API");
+    }
 
     if (!data.data?.length) {
         throw new Error("No weather data found.");
@@ -31,6 +45,7 @@ async function fetchWeather(lat, lon) {
 
     return data.data[0];
 }
+
 
 async function handleSaveCity(req, res) {
     try {
@@ -87,7 +102,9 @@ async function handleGetWeather(req, res) {
         console.log(`[DB] Found city for widget ${widget_id}: ${city}`);
 
         const { lat, lon } = await getCoordinates(city);
+        console.log(lat, lon)
         const weatherData = await fetchWeather(lat, lon);
+        console.log(weatherData)
 
         res.status(200).json(weatherData);
     } catch (error) {
