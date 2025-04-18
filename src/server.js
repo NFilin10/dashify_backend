@@ -7,6 +7,8 @@ const todoRoute = require('./routes/todo.route');
 const widgetRoute = require('./routes/widget.route');
 const weatherRoute = require('./routes/weather.route');
 const noteRoute = require('./routes/note.route');
+const columnRoute = require('./routes/column.routes');
+
 
 
 const cookieParser = require('cookie-parser');
@@ -34,6 +36,9 @@ app.use('/pos/', freeposRoutes);
 app.use('/widgets/todo/', todoRoute);
 app.use('/widgets/weather/', weatherRoute);
 app.use('/widgets/note/', noteRoute);
+
+app.use('/columns/', columnRoute);
+
 
 
 
