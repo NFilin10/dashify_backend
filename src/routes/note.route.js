@@ -6,8 +6,8 @@ const {
 } = require('../controllers/noteController');
 const authenticateMiddleware = require("../middlewares/auth.middleware");
 
-router.post("/save-note", authenticateMiddleware, handleSaveNote);
+router.post("/save-note", handleSaveNote);
 
-router.get("/get-note", authenticateMiddleware, handleGetNoteForWidget);
+router.get("/get-note", handleGetNoteForWidget);
 
 module.exports = router;

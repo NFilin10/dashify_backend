@@ -8,9 +8,9 @@ const {
 } = require('./../controllers/todoController');
 const authenticateMiddleware = require("../middlewares/auth.middleware");
 
-router.post("/add-task", authenticateMiddleware, handleAddTask);
-router.put('/complete-task', authenticateMiddleware, handleCompleteTask);
-router.get("/get-tasks", authenticateMiddleware, handleGetTasks);
-router.delete("/delete-task", authenticateMiddleware, handleDeleteTask);
+router.post("/add-task", handleAddTask);
+router.put('/complete-task', handleCompleteTask);
+router.get("/get-tasks", handleGetTasks);
+router.delete("/delete-task", handleDeleteTask);
 
 module.exports = router;

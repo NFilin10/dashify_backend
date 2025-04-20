@@ -6,7 +6,7 @@ const {
 } = require('../controllers/weatherController');
 const authenticateMiddleware = require("../middlewares/auth.middleware");
 
-router.post("/save-city", authenticateMiddleware, handleSaveCity);
-router.get("/get-weather", authenticateMiddleware, handleGetWeather);
+router.post("/save-city", handleSaveCity);
+router.get("/get-weather", handleGetWeather);
 
 module.exports = router;

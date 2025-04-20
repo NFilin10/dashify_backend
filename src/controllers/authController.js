@@ -1,10 +1,12 @@
 const express = require('express');
 const pool = require("../database");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 
 const secret = process.env.SECRET
+console.log("SECRET" + secret)
 const maxAge = 60 * 60;
 const generateJWT = (id) => {
     return jwt.sign({ id }, secret, { expiresIn: maxAge })
