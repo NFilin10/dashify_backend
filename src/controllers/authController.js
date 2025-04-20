@@ -86,7 +86,6 @@ const login = async (req, res) => {
 
 
 const logout  = async (req, res) => {
-    console.log('delete jwt request arrived');
     res
         .status(202)
         .clearCookie('jwt')

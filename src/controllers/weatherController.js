@@ -18,7 +18,6 @@ async function getCoordinates(cityName) {
 
 async function fetchWeather(lat, lon) {
     const url = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`;
-    console.log(`[Weather API] Request: ${url}`);
 
     const response = await fetch(url, {
         method: 'GET',
@@ -65,13 +64,11 @@ async function handleSaveCity(req, res) {
                 "UPDATE city SET city = $1 WHERE weather_widget_id = $2",
                 [city, widget_id]
             );
-            console.log(`[DB] City updated for widget ${widget_id}: ${city}`);
         } else {
             await pool.query(
                 "INSERT INTO city (weather_widget_id, city) VALUES ($1, $2)",
                 [widget_id, city]
             );
-            console.log(`[DB] City inserted for widget ${widget_id}: ${city}`);
         }
 
         res.status(200).json({ message: "City saved successfully." });
@@ -99,12 +96,9 @@ async function handleGetWeather(req, res) {
         }
 
         const city = rows[0].city;
-        console.log(`[DB] Found city for widget ${widget_id}: ${city}`);
 
         const { lat, lon } = await getCoordinates(city);
-        console.log(lat, lon)
         const weatherData = await fetchWeather(lat, lon);
-        console.log(weatherData)
 
         res.status(200).json(weatherData);
     } catch (error) {

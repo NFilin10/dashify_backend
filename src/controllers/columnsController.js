@@ -142,7 +142,6 @@ async function handleAddColumnLayoutWidget(req, res) {
 async function handleUpdateColumnLayoutWidget(req, res) {
     try {
         const { widget_id, new_column_id, new_position } = req.body;
-        console.log(req.body)
 
         if (!widget_id || !new_column_id || new_position == null) {
             return res.status(400).json({ message: "Missing widget_id, column_id, or position" });
