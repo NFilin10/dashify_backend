@@ -3,6 +3,7 @@ const { handleSaveLayoutSettings, handleGetLayoutSettings, handleUploadImage, ha
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const authenticateMiddleware = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
@@ -21,10 +22,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.put('/save-layout-settings', handleSaveLayoutSettings);
-router.get("/get-layout-settings", handleGetLayoutSettings);
-router.post("/upload-image", upload.single("image"), handleUploadImage);
-router.delete("/delete-image", handleDeleteImage);
+router.put('/save-layout-settings', authenticateMiddleware, handleSaveLayoutSettings);
+router.get("/get-layout-settings", authenticateMiddleware, handleGetLayoutSettings);
+router.post("/upload-image", authenticateMiddleware, upload.single("image"), handleUploadImage);
+router.delete("/delete-image", authenticateMiddleware, handleDeleteImage);
 
 router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 

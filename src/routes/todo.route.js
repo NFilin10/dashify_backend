@@ -6,6 +6,7 @@ const {
     handleGetTasks,
     handleDeleteTask
 } = require('./../controllers/todoController');
+const authenticateMiddleware = require("../middlewares/auth.middleware");
 
 router.post("/add-task", handleAddTask);
 router.put('/complete-task', handleCompleteTask);

@@ -11,7 +11,7 @@ const authenticate = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, secret);
         req.userId = decoded.id;
-        next(); // Call the next middleware
+        next();
     } catch (err) {
         console.error('Authentication error:', err.message);
         return res.status(403).json({ error: "Invalid token" });

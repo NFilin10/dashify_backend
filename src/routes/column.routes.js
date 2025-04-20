@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const authenticateMiddleware = require('./../middlewares/auth.middleware');
+
 const {
     addColumn,
     updateColumn,
@@ -12,19 +14,15 @@ const {
 } = require('../controllers/columnsController');
 
 
-router.get('/', getUserColumns);
-router.post('/', addColumn);
-router.put('up/:id', updateColumn);
-router.delete('up/:id', deleteColumn);
-
-router.post("/add", handleAddColumnLayoutWidget);
+router.get('/get-columns', authenticateMiddleware, getUserColumns);
+router.post('/add-column', authenticateMiddleware, addColumn);
+router.put('/update-column/:id', authenticateMiddleware, updateColumn);
+router.delete('/delete-column/:id', authenticateMiddleware, deleteColumn);
 
 
-router.put("/update", handleUpdateColumnLayoutWidget);
-
-// Delete widget
-router.delete("/delete", handleDeleteColumnLayoutWidget);
-
-router.get("/all", handleGetColumnLayoutWidgets);
+router.post("/add-widget", authenticateMiddleware, handleAddColumnLayoutWidget);
+router.put("/update-pos", authenticateMiddleware, handleUpdateColumnLayoutWidget);
+router.delete("/delete-widget", authenticateMiddleware, handleDeleteColumnLayoutWidget);
+router.get("/widgets/column-widgets", authenticateMiddleware, handleGetColumnLayoutWidgets);
 
 module.exports = router;

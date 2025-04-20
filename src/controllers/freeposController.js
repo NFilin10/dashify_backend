@@ -92,17 +92,23 @@ async function handleUpdateWidgetPosition(req, res) {
 
 async function handleGetWidgetPositions(req, res) {
     try {
+        const userId = extractUserId(req);
+
         const result = await pool.query(
             `SELECT fw.id, fw.x, fw.y, fw.widget_id, w.widget_type
              FROM freepos_widgets fw
-             JOIN widgets w ON fw.widget_id = w.id`
+             JOIN widgets w ON fw.widget_id = w.id
+             WHERE w.user_id = $1`,
+            [userId]
         );
+
         res.status(200).json(result.rows);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error while fetching widget positions" });
     }
 }
+
 
 async function handleDeleteWidgetPosition(req, res) {
     try {

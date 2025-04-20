@@ -4,6 +4,7 @@ const {
     handleSaveNote,
     handleGetNoteForWidget
 } = require('../controllers/noteController');
+const authenticateMiddleware = require("../middlewares/auth.middleware");
 
 router.post("/save-note", handleSaveNote);
 
