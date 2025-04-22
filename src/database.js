@@ -52,7 +52,6 @@ const waitForDatabase = async (retries = 5, delay = 5000) => {
 };
 
 const createTablesQuery = `
-    -- First create tables without foreign keys
     CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -74,7 +73,6 @@ const createTablesQuery = `
         FOREIGN KEY (widget_id) REFERENCES widgets(id) ON DELETE CASCADE
     );
 
-    -- Now create tables that have foreign keys referencing the above tables
     CREATE TABLE IF NOT EXISTS city (
         id SERIAL PRIMARY KEY,
         weather_widget_id INTEGER NOT NULL,
@@ -83,20 +81,23 @@ const createTablesQuery = `
             REFERENCES weather_widget (widget_id) ON DELETE CASCADE
     );
 
-    CREATE TABLE IF NOT EXISTS column_widgets (
-        id SERIAL PRIMARY KEY,
-        column_id INTEGER NOT NULL,
-        widget_id INTEGER NOT NULL,
-        "position" INTEGER NOT NULL
-    );
-
     CREATE TABLE IF NOT EXISTS columns (
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
         width DOUBLE PRECISION NOT NULL,
-        "position" INTEGER NOT NULL,
+        position INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
+
+    CREATE TABLE IF NOT EXISTS column_widgets (
+        id SERIAL PRIMARY KEY,
+        column_id INTEGER NOT NULL,
+        widget_id INTEGER NOT NULL,
+        position INTEGER NOT NULL,
+        FOREIGN KEY (column_id) REFERENCES columns(id) ON DELETE CASCADE,
+        FOREIGN KEY (widget_id) REFERENCES widgets(id) ON DELETE CASCADE
+    );
+
 
     CREATE TABLE IF NOT EXISTS freepos_widgets (
         id SERIAL PRIMARY KEY,
@@ -130,7 +131,6 @@ const createTablesQuery = `
         FOREIGN KEY (note_widget_id) REFERENCES note_widget(widget_id) ON DELETE CASCADE
     );
 
-    -- Create todo_widget table before todo_tasks (this was the issue)
     CREATE TABLE IF NOT EXISTS todo_widget (
         id SERIAL PRIMARY KEY,
         widget_id INTEGER NOT NULL UNIQUE,
