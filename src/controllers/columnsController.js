@@ -130,6 +130,10 @@ async function handleAddColumnLayoutWidget(req, res) {
             await pool.query("INSERT INTO weather_widget (widget_id) VALUES ($1)", [widgetId]);
         } else if (type === "note") {
             await pool.query("INSERT INTO note_widget (widget_id) VALUES ($1)", [widgetId]);
+        } else if (type === "customLinks") {
+            await pool.query("INSERT INTO custom_link_widget (widget_id) VALUES ($1)", [widgetId]);
+        } else if (type === "imageCarousel") {
+            await pool.query("INSERT INTO image_carousel_widget (widget_id) VALUES ($1)", [widgetId]);
         }
 
         res.status(201).json({ message: "Widget added to column successfully", widgetId });

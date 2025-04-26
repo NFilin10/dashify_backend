@@ -39,6 +39,10 @@ async function handleAddWidget(req, res) {
             await pool.query("INSERT INTO weather_widget (widget_id) VALUES ($1)", [widgetId]);
         } else if (widget_type === "note") {
             await pool.query("INSERT INTO note_widget (widget_id) VALUES ($1)", [widgetId]);
+        } else if (widget_type === "customLinks") {
+            await pool.query("INSERT INTO custom_link_widget (widget_id) VALUES ($1)", [widgetId]);
+        } else if (widget_type === "imageCarousel") {
+            await pool.query("INSERT INTO image_carousel_widget (widget_id) VALUES ($1)", [widgetId]);
         }
 
         res.status(201).json({ message: "Widget created successfully", widgetId });

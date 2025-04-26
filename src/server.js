@@ -7,6 +7,9 @@ const todoRoute = require('./routes/todo.route');
 const weatherRoute = require('./routes/weather.route');
 const noteRoute = require('./routes/note.route');
 const columnRoute = require('./routes/column.routes');
+const customLinksRoutes = require('./routes/customLinks.routes');
+const imageCarouselRoutes = require('./routes/imageCarousel.routes');
+
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
@@ -32,6 +35,10 @@ app.use('/api/widgets/todo/', todoRoute);
 app.use('/api/widgets/weather/', weatherRoute);
 app.use('/api/widgets/note/', noteRoute);
 app.use('/api/columns/', columnRoute);
+app.use('/api/widgets/custom-links', customLinksRoutes);
+app.use('/api/widgets/image-carousel', imageCarouselRoutes);
+
+
 
 
 const server = app.listen(port, () => {

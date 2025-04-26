@@ -31,12 +31,11 @@ const execute = async (...queries) => {
     }
 };
 
-// Wait for the PostgreSQL database to be available
 const waitForDatabase = async (retries = 5, delay = 5000) => {
     let success = false;
     while (retries > 0) {
         try {
-            await pool.query('SELECT NOW()'); // Query the database to check connectivity
+            await pool.query('SELECT NOW()');
             success = true;
             console.log('Database is connected');
             break;
@@ -44,7 +43,7 @@ const waitForDatabase = async (retries = 5, delay = 5000) => {
             retries -= 1;
             console.log(`Waiting for DB to be ready. Retries left: ${retries}`);
             if (retries > 0) {
-                await new Promise(resolve => setTimeout(resolve, delay)); // wait before retry
+                await new Promise(resolve => setTimeout(resolve, delay));
             }
         }
     }
@@ -144,12 +143,38 @@ const createTablesQuery = `
         task TEXT,
         FOREIGN KEY (todo_list_id) REFERENCES todo_widget(widget_id) ON DELETE CASCADE
     );
+
+    CREATE TABLE IF NOT EXISTS custom_link_widget (
+        id SERIAL PRIMARY KEY,
+        widget_id INTEGER NOT NULL UNIQUE,
+        FOREIGN KEY (widget_id) REFERENCES widgets(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS links (
+        id SERIAL PRIMARY KEY,
+        custom_link_id INTEGER NOT NULL,
+        link TEXT,
+        FOREIGN KEY (custom_link_id) REFERENCES custom_link_widget(widget_id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS image_carousel_widget (
+        id SERIAL PRIMARY KEY,
+        widget_id INTEGER NOT NULL UNIQUE,
+        FOREIGN KEY (widget_id) REFERENCES widgets(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS images (
+        id SERIAL PRIMARY KEY,
+        image_carousel_id INTEGER NOT NULL,
+        image_path VARCHAR,
+        FOREIGN KEY (image_carousel_id) REFERENCES image_carousel_widget(widget_id) ON DELETE CASCADE
+    );
 `;
 
 
 
 const initializeDatabase = async () => {
-    const dbReady = await waitForDatabase(); // Wait for DB to be ready
+    const dbReady = await waitForDatabase();
     if (dbReady) {
         const result = await execute(createTablesQuery);
         if (result) {
@@ -162,7 +187,6 @@ const initializeDatabase = async () => {
     }
 };
 
-// Initialize the database on application startup
 initializeDatabase();
 
 module.exports = pool;
